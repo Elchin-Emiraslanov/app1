@@ -4,7 +4,7 @@ from goods.views import *
 app_name = 'goods'
 
 urlpatterns = [
-    path('',
+    path('<slug:category_slug>/',
         catalog,
         name='index'
         ),
