@@ -8,6 +8,11 @@ urlpatterns = [
         catalog,
         name='index'
         ),
+        
+    path('<slug:category_slug>/<int:page>/',
+        catalog,
+        name='index'
+        ),
  
     path('product/<slug:product_slug>/',
         product,
