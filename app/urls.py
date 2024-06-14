@@ -25,6 +25,7 @@ urlpatterns = [
     path("", include('main.urls', namespace='main')),
     path("catalog/", include("goods.urls", namespace='catalog')),
     path("__debug__/", include("debug_toolbar.urls")),
+    path('user/', include('users.urls', namespace='user'))
 ]
 
 if DEBUG:

@@ -1,4 +1,4 @@
-{% extends "main/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% load goods_tags %}
 
@@ -105,7 +105,7 @@
             {% endfor %}
             
             <li class="page-item {% if not goods.has_next %} disabled {% endif %}">
-                <a class="page-link" href="{% if goods.has_next %}?page={% change_params page=goods.next_page_number %}{% else %}#{% endif %}">Next</a>
+                <a class="page-link" href="{% if goods.has_next %}?={% change_params page=goods.next_page_number %}{% else %}#{% endif %}">Next</a>
             </li>
         </div>
     </ul>
@@ -115,6 +115,6 @@
 {% block footer %}
 <footer class="py-4 bg-dark">
     <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Home Python Hub Studio 2023</p>
+        <p class="m-0 text-center text-white">Designed for developer Elchin</p>
     </div>
 </footer>{% endblock footer %}
