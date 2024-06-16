@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 from users.models import User
 
@@ -8,7 +8,7 @@ class UserLoginForm(AuthenticationForm):
     class Meta:
         model = User
         fields = ['username','password']
-        
+
     username = forms.CharField()
     password = forms.CharField()
 
@@ -23,4 +23,67 @@ class UserLoginForm(AuthenticationForm):
     #     widget=forms.PasswordInput(attrs={"autocomplete": "current-password",
     #                                       'class':'form-control',
     #                                       'placeholder': 'Введите ваш пароль'}),
+    # )
+
+
+class UserRegistrartion(UserCreationForm):
+
+    class Meta:
+        model = User
+        fields = (
+            "first_name",
+            "last_name",
+            "username",
+            "email",
+            "password1",
+            "password2",
+        )
+
+    # first_name = forms.CharField(
+    #     widget=forms.TextInput(
+    #         attrs ={
+    #             "class": "form-control",
+    #             "place_holder": "Ведите ваше имя",
+    #         }
+    #     )
+    # )
+    # last_name = forms.CharField(
+    #     widget=forms.TextInput(
+    #         attrs ={
+    #             "class": "form-control",
+    #             "place_holder": "Ведите вашу фамилию",
+    #         }
+    #     )
+    # )
+    # username = forms.CharField(
+    #     widget=forms.TextInput(
+    #         attrs ={
+    #             "class": "form-control",
+    #             "place_holder": "Ведите ваше имя пользователя",
+    #         }
+    #     )
+    # )
+    # email = forms.CharField(
+    #     widget=forms.EmailInput(
+    #         attrs ={
+    #             "class": "form-control",
+    #             "place_holder": "Ведите ваше email *youremail@example.com",
+    #         }
+    #     )
+    # )
+    # password1 = forms.CharField(
+    #     widget=forms.PasswordInput(
+    #         attrs ={
+    #             "class": "form-control",
+    #             "place_holder": "Ведите ваш пароль"
+    #         }
+    #     )
+    # )
+    # password2 = forms.CharField(
+    #     widget=forms.PasswordInput(
+    #         attrs ={
+    #             "class": "form-control",
+    #             "place_holder": "подтвердите ваш пароль"
+    #         }
+    #     )
     # )
