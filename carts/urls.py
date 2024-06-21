@@ -16,7 +16,7 @@ urlpatterns = [
 
         
         
-    path('cart_remove/<slug:product_slug>/',
+    path('cart_remove/<int:cart_id>/',
         cart_remove,
          name='cart_remove',
         ),

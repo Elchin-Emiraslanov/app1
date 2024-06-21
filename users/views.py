@@ -20,7 +20,7 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user:
                 auth.login(request, user)
-                messages.success(request, f"{username}, Siz hesaba daxil olduz")
+                messages.success(request, f"{username}, Siz hesaba daxil oldunuz")
 
                 redirect_page = request.POST.get('next', None)
                 if redirect_page and redirect_page != reverse('user:logout'):
