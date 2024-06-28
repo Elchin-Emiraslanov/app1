@@ -28,8 +28,10 @@
                         <p>x {{ cart.product.sell_price }} = </p>
                     </div>
                     <div class="col p-0"><strong> {{ cart.products_price }} $</strong></div>
-                    <div class="col p-0" method="post">
-                        <a href="{% url "cart:cart_remove" %}" class="remove-from-cart" data-cart-id="{{ cart.cart_id }}">
+                    <div class="col p-0">
+                        <a href="{% url "cart:cart_remove" %}" method='post' class="remove-from-cart"
+                        data-cart-id="{{ cart.id }}">
+                            {% csrf_token %}
                             <img class="mx-1" src="{% static "deps/icons/trash3-fill.svg" %}"
                                 alt="Catalog Icon" width="16" height="16">
                         </a>
