@@ -8,26 +8,39 @@ from carts.utils import get_user_carts
 from goods.models import Products
 
 
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
+
+from carts.models import Cart
+from carts.utils import get_user_carts
+from goods.models import Products
+
 def cart_add(request):
-
     product_id = request.POST.get("product_id")
+    product = get_object_or_404(Products, id=product_id)
 
-    product = Products.objects.get(id=product_id)
+    if not request.session.session_key:
+        request.session.create()
+    session_key = request.session.session_key
 
     if request.user.is_authenticated:
         carts = Cart.objects.filter(user=request.user, product=product)
+        user = request.user
+        session_key = None
+    else:
+        carts = Cart.objects.filter(session_key=session_key, product=product)
+        user = None
 
-        if carts.exists():
-            cart = carts.first()
-            if cart:
-                cart.quantity += 1
-                cart.save()
-        else:
-            Cart.objects.create(user=request.user, product=product, quantity=1)
+    if carts.exists():
+        cart = carts.first()
+        cart.quantity += 1
+        cart.save()
+    else:
+        Cart.objects.create(user=user, session_key=session_key, product=product, quantity=1)
 
     user_cart = get_user_carts(request)
-    cart_items_html = render_to_string(
-        "carts/includes/included_cart.html", {"carts": user_cart}, request=request)
+    cart_items_html = render_to_string("carts/includes/included_cart.html", {"carts": user_cart}, request=request)
 
     response_data = {
         "message": "Product is added to basket",
@@ -35,6 +48,7 @@ def cart_add(request):
     }
 
     return JsonResponse(response_data)
+
 
 def cart_change(request):
     if request.method == "POST":
