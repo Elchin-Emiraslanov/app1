@@ -1,3 +1,4 @@
+import re
 from django import forms
 
 class CreatedOrderForm(forms.Form):
@@ -20,7 +21,17 @@ class CreatedOrderForm(forms.Form):
          ],
          )
 
-    
+    def clean_phone_number(self):
+        data = self.cleaned_data['phone_number']
+
+        if not data.isdigit():
+            raise forms.ValidationError("Telefon nömrəsi yalnız rəqəm qəbul etməlidir ")
+        
+        pattern = re.compile(r'^\d{10}$')
+        if not pattern.match(data):
+            raise forms.ValidationError("Nomre formati duzgun deyil")
+        
+        return data
 
     # first_name = forms.CharField(
     #     widget=forms.TextInput(
