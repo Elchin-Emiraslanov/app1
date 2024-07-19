@@ -67,7 +67,7 @@
                             <label for="id_delivery_address" class="form-label">Адрес
                                 доставки*:</label>
                             <textarea class="form-control" id="id_delivery_address"
-                            value="{% if form.delivery_address.value %}{{ form.delivery_adress.value }}{% endif %}"
+                            value="{% if form.delivery_address.value %}{{ form.delivery_address.value }}{% endif %}"
                                 name="delivery_address" rows="2"></textarea>
                                 {% if form.delivery_address.errors %}
                                     <div class="alert alert-danger alert-dismissible fad show">{{ form.delivery_address.errors }}</div>
@@ -85,6 +85,9 @@
                                 <input class="form-check-input" type="radio" name="payment_on_get"
                                     id="id_payment_on_get" value="1">
                                 <label class="form-check-label" for="id_payment_on_get">Наличными/картой
+                                {% if form.payment_on_get.errors %}
+                                    <div class="alert alert-danger alert-dismissible fad show">{{ form.payment_on_get.errors }}</div>
+                                {% endif %}
                                     при плучении</label>
                             </div>
                         </div>

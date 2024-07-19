@@ -19,7 +19,7 @@ class Order(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.SET_DEFAULT, blank=True, null=True, verbose_name="User", default=None)
     created_timestamp = models.DateTimeField(auto_now_add=True, verbose_name="Date create order")
     phone_number = models.CharField(max_length=20, verbose_name="Phone number")
-    requires_delievery = models.BooleanField(default=False, verbose_name="delivery required")
+    requires_delivery = models.BooleanField(default=False, verbose_name="delivery required")
     delivery_address = models.TextField(null=True, blank=True, verbose_name='delivery adress')
     payment_on_get = models.BooleanField(default=False, verbose_name="Payment upon receipt")
     is_paid = models.BooleanField(default=False, verbose_name="Done")
