@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
+{% load cache %}
 {% load carts_tags %}
 
 {% block content %}
-{% user_carts request as carts %}
 <div class="row">
     <div class="container mt-5">
         <div class="row">
@@ -17,62 +17,62 @@
                             <div class="col-md-12 mb-3 text-center">
                                 {% if user.image %}
                                     <img src="{{ user.image.url }}"
-                                    alt="Аватар пользователя" class="img-fluid rounded-circle"
-                                    style="max-width: 150px;">
+                                        alt="Аватар пользователя" class="img-fluid rounded-circle"
+                                        style="max-width: 150px;">
                                 {% else %}
                                     <img src="{% static "deps/images/baseavatar.jpg" %}"
-                                    alt="Аватар пользователя" class="img-fluid rounded-circle"
-                                    style="max-width: 150px;">
+                                        alt="Аватар пользователя" class="img-fluid rounded-circle"
+                                        style="max-width: 150px;">
                                 {% endif %}
                                 <input type="file" class="form-control mt-3" id="id_image"
-                                    name="image"
+                                    name='image'
                                     accept="image/*">
                                     {% if form.image.errors %}
-                                    <div class="alert alert-danger alert-dismissible fad show">{{ form.image.errors }}</div>
+                                    <div class="alert alert-danger alert-dismissible fade show">{{form.image.errors}}</div>
                                     {% endif %}
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label for="id_first_name" class="form-label">Имя*</label>
                                 <input type="text" class="form-control" id="id_first_name"
-                                    placeholder="Введите ваше имя"
                                     name="first_name"
-                                    value="{{ form.first_name.value }}" 
+                                    placeholder="Введите ваше имя"
+                                    value="{{ form.first_name.value }}"
                                     required>
                                     {% if form.first_name.errors %}
-                                    <div class="alert alert-danger alert-dismissible fad show">{{ form.first_name.errors }}</div>
+                                    <div class="alert alert-danger alert-dismissible fade show">{{form.first_name.errors}}</div>
                                     {% endif %}
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label for="id_last_name" class="form-label">Фамилия*</label>
                                 <input type="text" class="form-control" id="id_last_name"
+                                    name="last_name"
                                     placeholder="Введите вашу фамилию"
-                                    name="last_name" 
-                                    value="{{ form.last_name.value }}" 
+                                    value="{{ form.last_name.value }}"
                                     required>
                                     {% if form.last_name.errors %}
-                                    <div class="alert alert-danger alert-dismissible fad show">{{ form.last_name.errors }}</div>
+                                    <div class="alert alert-danger alert-dismissible fade show">{{form.last_name.errors}}</div>
                                     {% endif %}
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label for="id_username" class="form-label">Имя пользователя*</label>
                                 <input type="text" class="form-control" id="id_username"
+                                    name="username"
                                     placeholder="Введите ваше имя пользователя"
-                                    name="username" 
-                                    value="{{ form.username.value }}" 
+                                    value="{{ form.username.value }}"
                                     required>
                                     {% if form.username.errors %}
-                                    <div class="alert alert-danger alert-dismissible fad show">{{ form.username.errors }}</div>
+                                    <div class="alert alert-danger alert-dismissible fade show">{{form.username.errors}}</div>
                                     {% endif %}
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label for="id_email" class="form-label">Email*</label>
                                 <input type="email" class="form-control" id="id_email"
                                     name="email"
-                                    placeholder="Введите ваш email *youremail@example.com" 
+                                    placeholder="Введите ваш email *youremail@example.com"
                                     value="{{ form.email.value }}"
                                     required>
                                     {% if form.email.errors %}
-                                    <div class="alert alert-danger alert-dismissible fad show">{{ form.email.errors }}</div>
+                                    <div class="alert alert-danger alert-dismissible fade show">{{form.email.errors}}</div>
                                     {% endif %}
                             </div>
                         </div>
@@ -82,6 +82,7 @@
             </div>
             <!-- Корзина -->
             {% user_carts request as carts %}
+
             <div class="col-md-7">
                 <div class=" bg-white p-4 mb-4 mx-2 rounded custom-shadow">
                     <h3 class="text-center mb-4">Корзина</h3>
@@ -90,11 +91,6 @@
                         {% include "carts/includes/included_cart.html" %}
                         <!-- Закончилась разметка корзины -->
                     </div>
-                {% if carts %}
-                    <a class="btn btn-dark" href="../orders/create_order.html">
-                        Оформить заказ
-                    </a>
-                {% endif %}
                 </div>
             </div>
             <!-- Оформленные заказы -->
@@ -104,13 +100,14 @@
                     <!-- Разметка заказов -->
                     <div class="container">
                         <div class="accordion" id="accordionExample">
+                            {% for order in orders %}
                             <div class="accordion-item">
-                                <h2 class="accordion-header" id="heading1">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
-                                        Заказ № 256 - 09 сентября 2023 9:04 | Статус:<strong class="mx-2"> В обработке</strong>
+                                <h2 class="accordion-header" id="heading{{ order.id }}">
+                                    <button class="accordion-button {% if order != orders.0 %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ order.id }}" aria-expanded="false" aria-controls="collapse{{ order.id }}">
+                                        Заказ № {{ order.id }} - {{ order.created_timestamp }} | Статус: <strong class="mx-2">{{order.status}}</strong>
                                     </button>
                                 </h2>
-                                <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="heading1" data-bs-parent="#accordionExample">
+                                <div id="collapse{{ order.id }}" class="accordion-collapse collapse {% if order == orders.0 %}show{% endif %}" aria-labelledby="heading{{ order.id }}" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
                                         <table class="table table-dark table-hover">
                                             <thead>
@@ -122,59 +119,28 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                {% for item in order.orderitem_set.all %}
                                                 <tr>
-                                                    <td><a class="text-white" href="#">Комплект стол и три стула</a></td>
-                                                    <td>1</td>
-                                                    <td>255.00 $</td>
-                                                    <td>255.00 $</td>
+                                                    <td><a class="text-white" href="{% url 'goods:product' item.product.slug %}">{{ item.product.name }}</a></td>
+                                                    <td>{{ item.quantity }}</td>
+                                                    <td>{{ item.price }}</td>
+                                                    <td>{{ item.products_price }}</td>
                                                     
                                                 </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="d-flex justify-content-between">
-                                            <p><strong>Итого:</strong></p>
-                                            <p><strong>255.00 $</strong></p>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="heading2">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                                        Заказ № 248 - 01 августа 2023 11:28 | Статус: <strong>Получен</strong>
-                                    </button>
-                                </h2>
-                                <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        <table class="table table-dark table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>Товар</th>
-                                                    <th>Количество</th>
-                                                    <th>Цена</th>
-                                                    <th>Общая стоимость</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td><a class="text-white" href="#">Стул офисный</a></td>
-                                                    <td>2</td>
-                                                    <td>30.00 $</td>
-                                                    <td>60.00 $</td>
-                                                    
-                                                </tr>
+                                                {% endfor %}
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
+                            {% endfor %}
                         </div>
                     </div>
+
                     <!-- Закончилась разметка заказов -->
                 </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
+{% endblock  %}

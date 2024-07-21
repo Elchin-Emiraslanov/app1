@@ -2,11 +2,12 @@ from django.db import transaction
 from django.forms import ValidationError
 from django.shortcuts import render, redirect
 from django.contrib import messages
-
+from django.contrib.auth.decorators import login_required
 from carts.models import Cart
 from orders.forms import CreatedOrderForm
 from orders.models import Order, OrderItem
 
+@login_required
 def create_order(request):
     if request.method == 'POST':
         form = CreatedOrderForm(data=request.POST)
